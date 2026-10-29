@@ -59,4 +59,6 @@ Price-impact display, configurable slippage, transaction history and simple noti
 
 ## Current next action
 
-Read STEP-01.md. No contract implementation has started.
+Read HANDOFF.md before continuing. As of 2026-10-29, the guided implementation has reached the first-deposit function in code/contracts/TokenZwap.sol. The last explanation covered `using SafeERC20 for IERC20`, transfers, square-root initial shares, reserves and LP minting. Ask whether the owner wants to revisit that function before taking the next small step: proportional later deposits.
+
+Contract compilation, dependency setup, tests and deployment are all pending. The owner explicitly deferred contract tests and deployment until near project completion; do not run them without updated direction. Verification is still required before delivery. Only the Python simulator has been exercised. Earlier day-by-day gates remain requirements, not claims of completed work.

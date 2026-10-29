@@ -2,9 +2,11 @@
 
 42 learning project: a two-token automated market maker (AMM) with a fixed-price NFT marketplace on BNB Chain testnet.
 
-Status: repository prepared; implementation has not started.
+Status: previous ERC-20 and NFT contracts imported, with a second ERC-20 adapted for the pool. The AMM now includes an initial-deposit function and LP receipt minting. Later deposits, withdrawals, swaps and NFT sales are not implemented. Compilation, local tests and deployment are pending. See [reuse notes](documentation/REUSE.md).
 
-Start with [the three-day plan](documentation/PLAN.md), then [Step 1](documentation/STEP-01.md).
+Continuing on another machine or in a new session? Read [the handoff](documentation/HANDOFF.md) first. The [three-day plan](documentation/PLAN.md) tracks the remaining scope.
+
+Run a guided, press-Enter lesson on deposits, LP ownership, swaps and withdrawals with `python3 code/simulator.py`. See the [terminal playground guide](documentation/SIMULATOR.md). This uses pretend balances and needs no blockchain dependencies. Optional manual mode: `python3 code/simulator.py --free`.
 
 ## Required structure
 
@@ -29,4 +31,4 @@ Learn one idea, implement one small piece, verify it, then commit it. Do not gen
 
 Tooling will be selected at the first setup session, preferably reusing the existing projects. No dependencies are installed yet; there are no build or deployment commands to run yet.
 
-This repository is local. No remote repository or deployment has been created.
+No blockchain deployment has been created. GitHub synchronization is separate from smart-contract deployment.
