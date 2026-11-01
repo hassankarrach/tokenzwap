@@ -58,32 +58,38 @@ The owner explicitly intends to complete bonus work after finishing, verifying a
 
 Price-impact display, configurable slippage, transaction history and simple notifications. Leave flash loans, dynamic fees, advanced charts and royalties outside the three-day target.
 
-## Current status and next action
+## Current status — saved 2026-11-01
 
-All mandatory contract features are implemented in source, but remain uncompiled and untested. On 2026-11-01 the owner supplied the original subject and requested mandatory scope only. It is preserved in SUBJECT.txt. Earlier assumptions that minimum outputs and deadlines were mandatory were incorrect: chapter V explicitly calls them bonus features.
+Mandatory contract source is implemented. All four contracts compile with solc 0.8.30, OpenZeppelin 5.4.0, optimizer 200 runs and EVM target paris. Eight focused local tests passed with individual test results confirmed. Coverage includes two-provider LP accounting and withdrawals, both swap directions and the 1% fee, invalid inputs, failed transfer rollback, both NFT payment tokens, seller authorization/cancellation/relisting, failed NFT delivery and blocked purchase reentrancy. This is focused verification, not completion of every checklist case above.
 
-Removed all user-defined minimum-output and deadline arguments/checks, purchase expected-terms parameters, self-purchase restriction and restrictive NFT receiver rules. Required pool and marketplace operations remain. Basic validity, ownership, seller authorization, safe transfers and reentrancy protection support correct execution rather than introducing additional product features. Events report these operations; no on-chain price history or chart is implemented.
+All four contracts are deployed on BNB Smart Chain Testnet (chain 97). Addresses, constructor arguments and transaction hashes are in deployment/bnb-testnet.json. RPC verification confirmed successful receipts, code presence, exact creation inputs against local compilation, fixed token supplies and the correct pool token pair. Evidence: deployment/bnb-testnet-verification.json. Actual deployment fees totaled 0.004235138 tBNB at 1 gwei, rather than the earlier estimate at 0.1 gwei. Last verified reserves and LP supply were zero. Do not redeploy to continue.
 
-Next required verification work: select/pin dependencies, compile all contracts, and create/run meaningful accounting, access-control and external-call tests. Include two-provider deposits/exits; fee/rounding/invariant checks; full exit/reinitialization; invalid amounts/tokens; both NFT payment tokens; purchase/cancellation authorization; relisting; duplicate/missing listings; failed payment/NFT delivery rollback; reentrant calls; and unchanged pool reserves/LP supply across marketplace operations.
+The React/Vite frontend has separate Swap, Liquidity and NFT Marketplace views, generated branding and a simplified responsive layout. It now defaults to live read-only MetaMask balances for tBNB, CLUB42, SWAP42, TZLP, pool reserves and LP supply. Chain/account changes clear obsolete reads; chain switching and refresh are supported. Existing simulated forms are isolated under Try demo. Live approvals and transaction actions are not implemented.
 
-Contract compilation, dependency setup, tests and deployment remain deferred by the owner. No contract toolchain was installed or run. Only the earlier Python simulator and source diff whitespace checks have been exercised; they do not verify Solidity behavior. Frontend, testnet deployment, evaluator distribution and final delivery documentation remain unfinished.
+Validation completed: production frontend build; eight contract tests; public deployment RPC checks; Chrome checks for demo flows and desktop/mobile layout; mocked-wallet checks for connection rejection, sample balances, empty pool, wrong-chain switching, account removal and separation from demo state. Real owner MetaMask connection and live transaction flows still need manual verification. Tests initially run under the restrictive sandbox only reported a file-level pass; the subsequent fully executed eight-test run is the result that counts.
 
-### UI-first update
+Art42 metadata was recovered from the original NFT repository at commit 656aba861e669c3ba5c23a6c14cb5b1754fe0e35. All ten remote JSON files were fetched and image URI references checked; snapshots are in deployment/metadata/. All remote image bytes/availability remain unverified. Original branded artwork is retained in frontend/assets/art42/ for later marketplace integration.
 
-The owner requested UI construction before contract testing. A buildless, responsive
-mock frontend now implements the supplied dark teal card/gradient style, with Swap,
-Liquidity and NFT Marketplace forms, illustrative NFT cards and in-memory demo
-interactions. No wallet integration or chain transactions are implemented yet.
-JavaScript syntax checking passed. Browser visual/interaction QA remains pending
-because the automation host was unavailable. This is a frontend preview, not a
-completed mandatory frontend or a passing accounting gate. Tests remain deferred
-until after UI work per the owner's direction. Real integration and deployment
-remain pending; bonuses stay scheduled after mandatory completion/understanding.
+Explorer source verification is optional under the supplied subject, not a mandatory gate. Keep it as a useful follow-up, not a blocker to required functionality. Bonus work stays deferred until mandatory work is complete and understood.
 
-### Vite preview update
+## Resume with this next learning step
 
-After repeated Python preview 404s on the owner's machine, the frontend now uses
-Vite with an explicit frontend root. From repository root:
-`npm --prefix frontend install`, then `npm run dev`; open http://127.0.0.1:5175/.
-`npm run build` produces frontend/dist. Frontend dependencies are separate from
-contract tooling. All app flows are still simulated; contract testing stays deferred.
+1. Start the frontend with Node 22+ and verify Connect wallet with the owner's actual MetaMask account on chain 97.
+2. Implement live token approvals and initial liquidity only. Proposed example: 100 CLUB42 + 200 SWAP42. Use integer base units, approved amounts, pending/rejected/failed/confirmed transaction states, and refresh after receipts. The owner signs in MetaMask; never request private credentials.
+3. Verify the initial deposit and resulting reserves/LP receipts before implementing further live actions.
+
+After that: later deposits and withdrawals; swaps in both directions; NFT mint/approval/list/purchase/cancel with reused artwork; test token distribution and two-wallet testnet demonstration; remaining edge tests, diagrams, screenshots, known limitations and reproducible setup documentation.
+
+## Resume setup and funds
+
+Use Node.js 22 or newer. The host's default Node is 12 and cannot run this app. A temporary Node 22.14 runtime was downloaded to /tmp/node-v22.14.0-linux-x64; it may disappear between sessions. With Node 22 selected:
+
+```sh
+npm ci
+npm --prefix frontend ci
+npm run dev
+```
+
+Open http://127.0.0.1:5175/. Other commands: npm run contracts:compile, npm run contracts:test, npm run build. Contract tests need an environment that allows Ganache to initialize its resources. npm run deploy:wallet starts the separate deployment helper on 5176, but deployment is already complete. Server processes are temporary and may need restarting.
+
+The owner previously received 0.01 tBNB; the current wallet balance should be read live. Saved daily funding resource: [GHOST BNB testnet faucet](https://ghostchain.io/faucet/bnb-testnet/), also in FAUCETS.md. Eligibility and cooldown can change. No automation or daily reminder was configured.

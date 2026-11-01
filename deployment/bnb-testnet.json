@@ -1,0 +1,47 @@
+{
+  "chainId": 97,
+  "network": "BNB Smart Chain Testnet",
+  "deployer": "0xfd568988A31f0Bac0d70d8bC9084F00B050FCFd3",
+  "metadataBaseURI": "ipfs://bafybeia33nhwz2g4fut2iatgrsdzgbcg7pg5qh7ow7ry7gsp4aoq2s4ylu/",
+  "compiler": "0.8.30+commit.73712a01.Emscripten.clang",
+  "optimizer": {
+    "enabled": true,
+    "runs": 200
+  },
+  "evmVersion": "paris",
+  "contracts": {
+    "Club42": {
+      "address": "0xf98415c58645CB07e9428201e987658cE4B177Cc",
+      "transactionHash": "0x4cccfb632b048b661d3d9e26cdfc39376f8ae4d5f11b3c98830e9c05fc34500a",
+      "blockNumber": 140227179,
+      "gasUsed": "558923",
+      "constructorArguments": []
+    },
+    "Swap42": {
+      "address": "0x1368611388191C3064C105dAB78B8BDCD734061E",
+      "transactionHash": "0x549736ed66fda18f3fbd0c1c7f758de450269c5494fa38de7e5da26cbd93c632",
+      "blockNumber": 140227205,
+      "gasUsed": "558923",
+      "constructorArguments": []
+    },
+    "Art42": {
+      "address": "0x484CB98D952650502433934Ffb49bA25953563B9",
+      "transactionHash": "0x93301e06f06415d660cddd78a137aa7e77b0a5c7a74318d66d80597cbe6317c5",
+      "blockNumber": 140227231,
+      "gasUsed": "1194312",
+      "constructorArguments": [
+        "ipfs://bafybeia33nhwz2g4fut2iatgrsdzgbcg7pg5qh7ow7ry7gsp4aoq2s4ylu/"
+      ]
+    },
+    "TokenZwap": {
+      "address": "0x58dCA96E9F99C5FF63c68C4feCF73fb6843dE1D7",
+      "transactionHash": "0xa4f0cb22571145b3d2ecfd41540348f225e71d0449f6868158536b007d789e80",
+      "blockNumber": 140227252,
+      "gasUsed": "1922980",
+      "constructorArguments": [
+        "0xf98415c58645CB07e9428201e987658cE4B177Cc",
+        "0x1368611388191C3064C105dAB78B8BDCD734061E"
+      ]
+    }
+  }
+}

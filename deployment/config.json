@@ -1,0 +1,8 @@
+{
+  "chainId": 97,
+  "network": "BNB Smart Chain Testnet",
+  "rpcUrl": "https://bsc-testnet-dataseed.bnbchain.org",
+  "explorer": "https://testnet.bscscan.com",
+  "metadataBaseURI": "ipfs://bafybeia33nhwz2g4fut2iatgrsdzgbcg7pg5qh7ow7ry7gsp4aoq2s4ylu/",
+  "metadataSource": "hassankarrach/tokenizeart-nft-minting-dapp@656aba861e669c3ba5c23a6c14cb5b1754fe0e35 deployment/remix-settings.json"
+}

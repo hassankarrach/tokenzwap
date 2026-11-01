@@ -1,46 +1,38 @@
 # Continue here — 2026-11-01
 
-## Latest owner direction
+Read AGENTS.md, README.md and PLAN.md. This is a guided learning project: implement one agreed step at a time. The owner asked to save and push progress so they can resume later.
 
-Read AGENTS.md, README.md and PLAN.md first. The owner initially requested guided small steps, then explicitly requested: “lets complete the full smart contract code for now, i'll leave understanding it for later”. All mandatory smart-contract source features are now implemented. The owner then supplied the subject and requested mandatory scope only; see SUBJECT.txt. Bonus minimum outputs/deadlines and extra purchase terms/self-purchase restrictions were removed. Do not treat this as verified completion of the project. Tests, toolchain installation and deployment remain deferred; do not run them without updated direction. Never request or commit real wallet credentials.
+## Next step
 
-## Planned bonus follow-up
+Verify the real MetaMask connection, then implement live token approvals and the first liquidity deposit (example: 100 CLUB42 + 200 SWAP42). No new deployment is needed. Include pending, rejected, failed and confirmed transaction handling; refresh balances after confirmation. The owner signs wallet transactions. Never request or commit private keys or seed phrases.
 
-The owner explicitly wants bonus work after the mandatory scope is finished, verified and properly understood. Preserve that intent in future sessions. Initial targets are user-defined slippage/minimum-output protection, transaction deadlines and frontend price-impact display. Keep current work focused on mandatory scope; do not add bonuses early. Other bonus items remain undecided.
+## Completed
 
-## Implemented source
+- Reused Club42 and Art42 source; adapted Swap42. TokenZwap implements LP shares, deposits/withdrawals, both swap directions with 1% retained fee and NFT escrow/list/purchase/cancel. NFT payments go directly buyer-to-seller, separate from reserves.
+- Pinned solc 0.8.30, OpenZeppelin 5.4.0, ethers 6.15.0 and Ganache 7.9.2. All four compile (optimizer 200, EVM paris). Eight focused local tests passed, including accounting, authorization, failed transfer/delivery rollback and purchase reentrancy. Additional edge coverage remains in PLAN.md.
+- All four BNB testnet contracts deployed. Public addresses and receipts: deployment/bnb-testnet.json. Read-only verification evidence: deployment/bnb-testnet-verification.json. Creation inputs match compiled source; pool token pair and token supplies checked. Last verified pool is empty. Actual fees totaled 0.004235138 tBNB. Explorer source verification is optional under the provided subject and remains undone.
+- Original Art42 metadata URI recovered and used at deployment. Ten remote metadata files fetched; image URI references checked. Snapshots: deployment/metadata/. Remote image bytes/availability for all ten remain unverified. Branded artwork: frontend/assets/art42/.
+- React/Vite app with separate views and local branding. Default live read-only wallet view connects MetaMask and reads tBNB/CLUB42/SWAP42/TZLP, reserves and LP supply from recorded addresses. Handles network/account changes, rejection and refresh. Demo forms remain separate under Try demo. No live main-app write flows yet.
+- Production build, Chrome demo/layout checks and mocked-wallet checks passed. Actual user wallet connection and live flows are not yet confirmed.
 
-- Club42: original fixed-supply Token A; Swap42: adapted fixed-supply Token B. Each gives 42,000 tokens to its deployer. Evaluators still need token distribution.
-- Art42: original standard ERC-721, public minting of IDs 1–10 and immutable IPFS directory constructor argument.
-- TokenZwap: ERC-20 LP receipts, initial deposits, exact-ratio later deposits, partial/full withdrawals, both swap directions with fixed 1% retained fee, and NFT escrow/list/purchase/seller cancellation. All asset-moving actions use nonReentrant. Marketplace payments go directly buyer-to-seller. Transaction events cover pool and marketplace actions.
-- Current signatures: `addInitialLiquidity(amountA, amountB)`, `addLiquidity(amountA, amountB)`, `removeLiquidity(shares)`, `swap(tokenIn, amountIn)`, `listNFT(nft, tokenId, paymentToken, price)`, `cancelNFTListing(nft, tokenId)`, `buyNFT(nft, tokenId)`. See CONTRACTS.md.
-- Standard receiver callback accepts safe NFT transfers. Unsolicited transfers/mints do not create listings and have no rescue path. Purchase uses current listing terms, without bonus price/deadline guards.
+## Running again
 
-## Verification and remaining work
+Use Node 22+. System default Node 12 is too old. Temporary runtime: /tmp/node-v22.14.0-linux-x64/bin (may disappear). With compatible Node on PATH:
 
-No contract dependency manifest, pinned installation, Solidity compilation, contract tests or blockchain deployment exists yet. A buildless mock frontend now exists; see frontend/README.md. Existing Solidity imports are not runnable here until tooling is set up. Source whitespace checks passed; they are not contract verification. Earlier Python simulator checks are also not contract verification.
+```sh
+npm ci
+npm --prefix frontend ci
+npm run dev
+```
 
-Previous projects used OpenZeppelin 5.4.0, solc 0.8.30, ethers 6.15.0 and Ganache 7.9.2. Reuse provenance is in REUSE.md. Target fresh BNB Chain testnet deployments, not old Sepolia addresses. Deployment/test directories remain placeholders. The frontend has HTML/CSS/JS source, in-memory demo flows and no wallet/contract integration.
+App: http://127.0.0.1:5175/. Servers may need restarting in a new session. Root scripts also provide contracts:compile, contracts:test, contracts:estimate and build. Contract tests require Ganache resources allowed by the environment. The separate deploy:wallet helper on 5176 was used for the completed deployment; do not redeploy the contracts to resume. Read deployment/README.md for details.
 
-Review CONTRACTS.md limitations before tests: exact-ratio deposit usability after swaps, initial LP/rounding policy, ignored direct token donations, unsupported fee-on-transfer/rebasing tokens, unchecked authenticity of arbitrary NFT collections, no rescue for unsolicited plain NFT transfers, standard receiver callback behavior and atomic rollback. No minimum liquidity is locked; full exit allows reinitialization.
+## Remaining mandatory work
 
-The next required engineering work is dependency setup, compilation and meaningful contract tests, when authorized. PLAN.md lists verification cases. After passing accounting tests, build the frontend, deployment scripts, two-wallet testnet demo and final documentation. The learning explanation can resume later at the owner's request.
+Live approvals/deposits/withdrawals/swaps; NFT mint/approval/list/buy/cancel and artwork integration; evaluator token distribution; two-wallet testnet demonstration; remaining edge tests; final README, diagrams, screenshots and limitations. Frontend mock tests do not verify actual wallet execution.
 
-## Latest UI work
+## Funds and scope
 
-The owner requested a UI before tests, matching a supplied dark teal dashboard
-reference (rounded cards, turquoise buttons, gradients). frontend/index.html,
-styles.css and app.js implement this with Swap/Liquidity/NFT navigation and demo
-balances/actions. Keep every action clearly labelled as simulated. No real wallet
-requests or transactions are sent. Run the static preview command in
-frontend/README.md. JS syntax passed; browser QA was blocked by unavailable browser
-access host. Continue UI feedback, then contract verification and real integration.
-Keep bonuses for after mandatory completion and understanding.
+Saved faucet: https://ghostchain.io/faucet/bnb-testnet/ (documentation/FAUCETS.md). Owner previously received 0.01 tBNB; read current balance from wallet. No scheduled faucet claims or reminder configured.
 
-### Vite preview update
-
-After repeated Python preview 404s on the owner's machine, the frontend now uses
-Vite with an explicit frontend root. From repository root:
-`npm --prefix frontend install`, then `npm run dev`; open http://127.0.0.1:5175/.
-`npm run build` produces frontend/dist. Frontend dependencies are separate from
-contract tooling. All app flows are still simulated; contract testing stays deferred.
+Bonus features stay deferred until mandatory scope is complete and understood. Initial planned bonuses: minimum output/slippage, deadlines and price impact. They are not mandatory under SUBJECT.txt.
