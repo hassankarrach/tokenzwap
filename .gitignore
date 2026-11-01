@@ -12,3 +12,7 @@ out/
 broadcast/
 .DS_Store
 *.log
+
+# Frontend dependencies and build output
+node_modules/
+frontend/dist/

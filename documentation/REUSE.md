@@ -14,4 +14,4 @@ Sources:
 
 Reuse the NFT project's compiler and local test approach (solc, ethers, Ganache and OpenZeppelin), adapting paths to this repository. Wallet connection patterns, NFT metadata handling and receiver test fixtures are candidates for later steps; they have not been copied yet.
 
-Target fresh deployments on BNB Chain testnet. Old Sepolia addresses are not used. No deployment has happened, dependencies are not installed, and these copies have not yet been compiled or tested here. Verify ERC-20 supply, distribution, allowances and transfers, plus NFT minting and transfers, before testnet deployment. The AMM and marketplace are not implemented.
+Target fresh deployments on BNB Chain testnet. Old Sepolia addresses are not used. No deployment has happened, dependencies are not installed, and these copies have not yet been compiled or tested here. Verify ERC-20 supply, distribution, allowances and transfers, plus NFT minting and transfers, before testnet deployment. The AMM and marketplace source is implemented, but compilation and contract tests remain pending.

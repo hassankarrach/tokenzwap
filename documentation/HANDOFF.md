@@ -1,39 +1,46 @@
-# Continue here — 2026-10-29
+# Continue here — 2026-11-01
 
-## How to work with the owner
+## Latest owner direction
 
-Read AGENTS.md, README.md and PLAN.md first. This is a guided learning project. Add one small, understandable piece to the existing final file, explain it with plain words and a small example, then pause for the owner. Do not generate the rest of the project at once. Explain technical keywords rather than assuming DeFi knowledge. The owner knows ERC-20 and ERC-721 but is learning AMMs, approvals, pool ownership and pricing.
+Read AGENTS.md, README.md and PLAN.md first. The owner initially requested guided small steps, then explicitly requested: “lets complete the full smart contract code for now, i'll leave understanding it for later”. All mandatory smart-contract source features are now implemented. The owner then supplied the subject and requested mandatory scope only; see SUBJECT.txt. Bonus minimum outputs/deadlines and extra purchase terms/self-purchase restrictions were removed. Do not treat this as verified completion of the project. Tests, toolchain installation and deployment remain deferred; do not run them without updated direction. Never request or commit real wallet credentials.
 
-The owner explicitly asked to defer contract tests and deployment until near completion. Do not install/run a contract toolchain or deploy as the next action. Keep verification pending in the documentation; it is necessary before final delivery. Do not request private keys in chat or commit wallet credentials.
+## Planned bonus follow-up
 
-## Current files and actual progress
+The owner explicitly wants bonus work after the mandatory scope is finished, verified and properly understood. Preserve that intent in future sessions. Initial targets are user-defined slippage/minimum-output protection, transaction deadlines and frontend price-impact display. Keep current work focused on mandatory scope; do not add bonuses early. Other bonus items remain undecided.
 
-- `code/contracts/Club42.sol`: unchanged original ERC-20; Token A, 42,000 fixed supply to deployer.
-- `code/contracts/Swap42.sol`: adapted ERC-20; Token B, same supply policy, different name/symbol.
-- `code/contracts/Art42.sol`: original NFT, public minting of IDs 1–10, IPFS directory constructor argument.
-- `code/contracts/TokenZwap.sol`: the growing final AMM file. Saves two distinct nonzero token addresses, declares reserves, inherits ERC20 for LP receipts named TokenZwap LP (TZLP), and imports SafeERC20 and ReentrancyGuard. Its only pool action is `addInitialLiquidity(amountA, amountB)`: require zero LP supply and positive inputs, calculate sqrt(amountA * amountB), safely transfer both approved tokens into the AMM, record reserves and mint initial LP receipts to the caller. It is nonReentrant.
-- `code/simulator.py`: standalone Python 3 guided terminal lesson. Run `python3 code/simulator.py`, press Enter through 17 steps, or q to quit. Optional `--free` command mode. Includes deposits, ownership, both-direction swaps, withdrawals, refused actions and fee comparison. This simulator was exercised successfully; this is not smart-contract verification.
-- `frontend/`, `deployment/`, `code/test/`: placeholders; no working implementation or deployment setup.
-- `documentation/REUSE.md`: original repository URLs and exact source commits.
+## Implemented source
 
-No package manifest, dependency installation, compiler invocation, Solidity tests, contract deployment or wallet connection has been completed. Solidity imports are therefore not yet runnable here. Previous repositories used OpenZeppelin 5.4.0, solc 0.8.30 and ethers 6.15.0; the NFT project also used Ganache 7.9.2. Select/pin tooling when the owner is ready.
+- Club42: original fixed-supply Token A; Swap42: adapted fixed-supply Token B. Each gives 42,000 tokens to its deployer. Evaluators still need token distribution.
+- Art42: original standard ERC-721, public minting of IDs 1–10 and immutable IPFS directory constructor argument.
+- TokenZwap: ERC-20 LP receipts, initial deposits, exact-ratio later deposits, partial/full withdrawals, both swap directions with fixed 1% retained fee, and NFT escrow/list/purchase/seller cancellation. All asset-moving actions use nonReentrant. Marketplace payments go directly buyer-to-seller. Transaction events cover pool and marketplace actions.
+- Current signatures: `addInitialLiquidity(amountA, amountB)`, `addLiquidity(amountA, amountB)`, `removeLiquidity(shares)`, `swap(tokenIn, amountIn)`, `listNFT(nft, tokenId, paymentToken, price)`, `cancelNFTListing(nft, tokenId)`, `buyNFT(nft, tokenId)`. See CONTRACTS.md.
+- Standard receiver callback accepts safe NFT transfers. Unsolicited transfers/mints do not create listings and have no rescue path. Purchase uses current listing terms, without bonus price/deadline guards.
 
-## Exact stopping point and next lesson
+## Verification and remaining work
 
-The last explanation walked through `using SafeERC20 for IERC20` and the new first-deposit function: checking inputs, calculating receipts, `msg.sender`, `address(this)`, approved transfers, reserves and `_mint`. The owner has not yet confirmed understanding of this latest function. First offer a brief recap or answer questions. Then implement only the next agreed small piece: proportional later deposits, explaining why new providers must match the pool ratio and how their LP shares are calculated. Continue growing TokenZwap.sol rather than replacing it wholesale.
+No contract dependency manifest, pinned installation, Solidity compilation, contract tests or blockchain deployment exists yet. A buildless mock frontend now exists; see frontend/README.md. Existing Solidity imports are not runnable here until tooling is set up. Source whitespace checks passed; they are not contract verification. Earlier Python simulator checks are also not contract verification.
 
-## Design details still needing review
+Previous projects used OpenZeppelin 5.4.0, solc 0.8.30, ethers 6.15.0 and Ganache 7.9.2. Reuse provenance is in REUSE.md. Target fresh BNB Chain testnet deployments, not old Sepolia addresses. Deployment/test directories remain placeholders. The frontend has HTML/CSS/JS source, in-memory demo flows and no wallet/contract integration.
 
-- Initial LP supply uses square root, rounded down; all receipts go to the first provider. No minimum liquidity is locked. The Python simulator instead chooses an arbitrary 100 first receipts for teaching. Explain that difference.
-- Multiplication is Solidity checked arithmetic and may revert on overflow. Rounding, tiny deposits and later LP minting policy need review.
-- Reserves are accounting variables, not automatically queried token balances. Direct donations are currently unaccounted for. Decide donation handling before completing accounting.
-- Intended pool assets are the fixed-supply Club42/Swap42 pair. Fee-on-transfer and rebasing tokens are unsupported. The constructor does not verify ERC-20 implementation at supplied addresses.
-- Later deposits, partial/full withdrawals, both-direction constant-product swaps, a fixed 1% fee retained by the pool, minimum output and deadlines are not implemented.
-- The fixed-price NFT marketplace must be in the same AMM contract: escrow listings priced in A or B, seller cancellation, purchases. NFT payments must stay separate from liquidity reserves (planned buyer-to-seller transfer).
-- Frontend, meaningful accounting/access-control/external-call tests, documentation diagrams/screenshots and reproducible deployment remain unfinished.
-- Target fresh BNB Chain testnet deployments. Solidity is technically usable on Sepolia, but the assignment targets BNB. Do not reuse old Sepolia addresses.
-- Evaluators need ERC-20 distribution because these fixed-supply tokens have no public mint function.
+Review CONTRACTS.md limitations before tests: exact-ratio deposit usability after swaps, initial LP/rounding policy, ignored direct token donations, unsupported fee-on-transfer/rebasing tokens, unchecked authenticity of arbitrary NFT collections, no rescue for unsolicited plain NFT transfers, standard receiver callback behavior and atomic rollback. No minimum liquidity is locked; full exit allows reinitialization.
 
-## Suggested message for a new session
+The next required engineering work is dependency setup, compilation and meaningful contract tests, when authorized. PLAN.md lists verification cases. After passing accounting tests, build the frontend, deployment scripts, two-wallet testnet demo and final documentation. The learning explanation can resume later at the owner's request.
 
-“Read AGENTS.md, README.md, documentation/PLAN.md and documentation/HANDOFF.md. Continue teaching me TokenZwap one small code change at a time. We stopped after addInitialLiquidity; recap it before moving to later deposits. Keep contract tests and deployment deferred for now.”
+## Latest UI work
+
+The owner requested a UI before tests, matching a supplied dark teal dashboard
+reference (rounded cards, turquoise buttons, gradients). frontend/index.html,
+styles.css and app.js implement this with Swap/Liquidity/NFT navigation and demo
+balances/actions. Keep every action clearly labelled as simulated. No real wallet
+requests or transactions are sent. Run the static preview command in
+frontend/README.md. JS syntax passed; browser QA was blocked by unavailable browser
+access host. Continue UI feedback, then contract verification and real integration.
+Keep bonuses for after mandatory completion and understanding.
+
+### Vite preview update
+
+After repeated Python preview 404s on the owner's machine, the frontend now uses
+Vite with an explicit frontend root. From repository root:
+`npm --prefix frontend install`, then `npm run dev`; open http://127.0.0.1:5175/.
+`npm run build` produces frontend/dist. Frontend dependencies are separate from
+contract tooling. All app flows are still simulated; contract testing stays deferred.
