@@ -93,3 +93,224 @@ npm run dev
 Open http://127.0.0.1:5175/. Other commands: npm run contracts:compile, npm run contracts:test, npm run build. Contract tests need an environment that allows Ganache to initialize its resources. npm run deploy:wallet starts the separate deployment helper on 5176, but deployment is already complete. Server processes are temporary and may need restarting.
 
 The owner previously received 0.01 tBNB; the current wallet balance should be read live. Saved daily funding resource: [GHOST BNB testnet faucet](https://ghostchain.io/faucet/bnb-testnet/), also in FAUCETS.md. Eligibility and cooldown can change. No automation or daily reminder was configured.
+
+## Live initial-liquidity update — 2026-11-02
+
+Implemented exact-amount token approvals and initial liquidity in the live Liquidity
+screen. Reads now include both allowances at the same block as balances. Approval
+buttons appear when needed, and deposit stays disabled until both allowances suffice.
+Amounts use 18-decimal integer base units. Confirmation/pending/success/rejection/failure
+states and explorer links are present; balances refresh after transactions. Wallet
+account and chain are checked before sending. Later deposits/withdrawals remain out
+of this step; an initialized pool disables the initial-deposit controls.
+
+Validation: production build and five mocked transaction tests pass (exact parsing,
+approval targets and amounts, deposit calldata, changed-account/network blocking,
+wallet rejection). Browser access host was unavailable and native browser automation
+timed out; visual/interaction QA and actual MetaMask approvals/deposit remain pending.
+No public transactions were sent. The owner's saved wallet read 0.106264862 tBNB on
+chain 97 today. Next: owner verifies Connect wallet, both approvals, first deposit,
+and resulting reserves/TZLP before implementing later live actions.
+
+### Colorflow visual update — 2026-11-02
+
+Liquidity work is on standby at the owner's request. Added a live Colorflow mesh
+background, editing the actual a001 mesh colors and Film Grain in Colorflow.
+Final requested palette: deep teal upper region, teal/mint transitions and a brighter
+pearl-white lower glow; bottom pink removed. Export ID zEZMpujd is used without
+CSS recoloring, opacity changes or dark overlays. It depends on external Colorflow
+hosting; paused/reduced-motion mode uses a local static gradient. Desktop appearance
+and pause/resume controls checked in Brave; production build passed. Mobile and
+reduced-motion visual checks remain pending. Actual MetaMask balance reads were
+visible for the saved owner wallet; no approvals or deposit were signed or sent.
+
+### Frosted cards — 2026-11-02
+
+Applied translucent dark glass surfaces and backdrop blur to stat cards, panels,
+NFT cards, listing forms and the status banner. Preserved colored stat-card rims
+and added a dark fallback for browsers without backdrop-filter. Removed the
+background pause control at the owner's request; reduced-motion still uses a
+static gradient. Desktop Liquidity appearance and absence of the pause button
+verified in Brave; production build passed. Mobile visual checks remain pending.
+
+### Live-only interface — 2026-11-02
+
+Removed the demo toggle, demo route rendering and live-approvals banner at the
+owner's request. Navigation now exposes live balances and supported live initial
+liquidity only; swap and NFT write flows remain pending. Legacy simulated views
+remain in source but are no longer imported by App.
+
+## Live withdrawals — 2026-11-03
+
+The owner reports both token approvals and the initial deposit completed. Added a
+live withdrawal form below the initial-deposit section in Liquidity. It previews
+both returns using integer shares * reserve / totalSupply, rounded down exactly
+like removeLiquidity(). MAX preserves all 18 decimals. Zero/excess shares, empty
+pools and zero-output rounding are blocked. Withdraw calls removeLiquidity(shares)
+without approval, handles wallet confirmation/pending/rejection/failure/confirmation
+and replacement receipts, then refreshes balances. Account and chain are checked
+before sending. No contracts were changed or redeployed.
+
+Nine focused frontend tests pass, including partial/full withdrawal math, rounding,
+invalid inputs, exact calldata with no approval and wrong-chain blocking. Production
+build passes. No withdrawal was sent by the agent. Actual MetaMask execution and
+post-withdrawal reserves, TZLP supply and wallet balances remain to be verified by
+the owner. Later deposits, swaps and NFT writes are still pending.
+
+## Later liquidity deposits — 2026-11-03
+
+Owner reports the 10-TZLP partial withdrawal completed; post-transaction chain
+balances have not been independently checked in this step. Connected initialized
+pool deposits to addLiquidity(amountA, amountB), retaining exact-amount approvals
+and confirmation states. The UI checks the contract's exact cross-product ratio,
+positive inputs, wallet balances and nonzero minted shares. The TZLP preview uses
+amountA * supply / reserveA, rounded down. Initial empty pools still use the initial
+entry point.
+
+Use pool ratio fills one entire reserve-sized pair (100% of current reserves),
+explicitly labelled; it does not infer a small deposit or restore the prior
+withdrawal. Both amounts remain editable. Integer rounding after withdrawal can
+make a visually 1:2 pair fail the exact base-unit ratio; this is an existing contract
+limitation, not relaxed in the UI. No contracts changed or public transactions sent.
+Twelve frontend transaction/math tests and production build pass. Real later-deposit
+execution, post-deposit balances and browser interaction QA remain pending.
+
+### Dedicated task pages — 2026-11-03
+
+Split the stacked live sections into sidebar routes: #overview for pool statistics,
+#balances for wallet balances, #liquidity for deposits and #withdraw for withdrawals.
+Swap and NFT routes remain. Wallet state stays shared, route changes scroll to the
+top, and mobile navigation wraps to keep every link reachable. Production build
+passes; desktop/mobile browser navigation checks remain pending.
+
+### Combined overview and second-provider preparation — 2026-11-03
+
+Pool overview and wallet balances now share #overview (Pool & balances); legacy
+#balances resolves to the same page. Separate deposit/withdraw pages remain.
+Read-only chain-97 RPC at block 140469638 confirmed second wallet
+0x7d54E7B84160eC1e894D88fd3ce2c96e48D4b709 holds 0.01 tBNB and zero
+CLUB42/SWAP42/TZLP. Pool reserves: 92.928932188134524756 CLUB42 and
+185.857864376269049512 SWAP42; LP supply 131.42135623730950488. Exact ratio
+is currently 1:2. This corroborates the owner's initial deposit and 10-TZLP
+withdrawal. Next manual test: distribute tokens from the funded original wallet,
+then connect second wallet, approve and deposit 10 CLUB42 + 20 SWAP42, check
+separate LP ownership and test its withdrawal. No transfers or deposits sent by agent.
+
+### Second-provider deposit verified — 2026-11-03
+
+Read-only chain-97 RPC at block 140471609 confirms second-wallet balances of
+10 CLUB42, 20 SWAP42 and 14.142135623730950487 TZLP. Original wallet still holds
+131.42135623730950488 TZLP. Reserves are 102.928932188134524756 CLUB42 and
+205.857864376269049512 SWAP42; total LP supply 145.563491861040455367.
+This confirms the second-provider 10/20 deposit and separate LP balances.
+Second-provider withdrawal, full exit/reinitialization and remaining live flows
+are not yet verified. No transaction sent by agent.
+
+## Required topic for the post-project explanation walkthrough
+
+Owner explicitly requested revisiting LP rounding after the project is finished,
+when the explanation walkthrough begins. Explain slowly with a small numerical
+example and the relevant Solidity lines:
+
+- Initial LP minting uses floor(sqrt(amountA * amountB)); later minting uses
+  floor(amountA * totalSupply / reserveA).
+- Withdrawals use floor(shares * reserve / totalSupply) for each token. Finite
+  base-unit precision means a proportional entitlement need not be exactly
+  representable; rounding occurs in share minting as well as withdrawal.
+- In the owner's second-provider example, redeeming all 14.142135623730950487
+  TZLP previews 9.999999999999999999 CLUB42 and 19.999999999999999998 SWAP42
+  after depositing 10 and 20. The 1 and 2 base-unit differences stay in pool
+  reserves; they are not destroyed, a withdrawal fee, or sent to an administrator.
+- After that provider exits, the remainder is represented by remaining holders'
+  LP ownership. Redeeming the entire remaining LP supply returns all accounted
+  reserves under the current formula; verify this with tests before presenting
+  it as tested behavior.
+- Distinguish unavoidable finite precision from the chosen round-down policy.
+  Other remainder-accounting designs exist; this exact dust outcome is not
+  inevitable in every design or every withdrawal.
+- LP ownership is a proportion of current reserves, not a guarantee of the
+  original deposit quantities after swaps/fees. Display rounding is separate
+  from actual on-chain integer rounding.
+
+Relevant code: code/contracts/TokenZwap.sol, addInitialLiquidity(), addLiquidity()
+and removeLiquidity(). This is a deferred explanation requirement, not a request
+to change the contract's rounding policy now.
+
+## Live swap step — 2026-11-03
+
+Owner reports second-provider full withdrawal: zero TZLP and near-20/40 token
+balances; exact post-withdrawal RPC verification remains pending. Implemented live
+Swap page for both directions, exact-input approvals, 18-decimal integer quotes,
+contract 1% retained-fee formula, wallet/network checks, pending/rejected/failed/
+confirmed states, replacement receipts, explorer links and refresh after receipts.
+Quotes are estimates using current reserves; no bonus minimum-output/deadline
+parameters were added. No contract changes, redeployments or public swaps sent.
+
+Production build and all 16 frontend tests pass. Swap-specific coverage includes
+both directional fee calculations and reserve-product checks, invalid/zero inputs,
+empty pools, insufficient balance, zero output, exact approval and swap calldata,
+and account/network send guards. These are mocked frontend tests, not new contract
+verification. Browser interaction QA and real swaps in both directions remain
+pending. Next manual test: second account approves/swaps 1 CLUB42, checks confirmed
+balances/reserves, then reverses direction and tests 1 SWAP42. Verify retained fee
+and unchanged LP supply using receipts and same-block reads.
+
+### Wallet-style card refresh — 2026-11-03
+
+Restyled cards using the owner's supplied wallet reference: larger rounded corners,
+soft top lighting, mint/teal glossy gradients, muted token-colored accents, recessed
+input surfaces and pill buttons. Removed the sharp bottom-lit stat-card rims while
+keeping the existing Colorflow background. Added token icons to live Swap input
+and output. Desktop Swap appearance checked in Brave; mobile visual verification
+remains pending. Functional transaction behavior is unchanged.
+
+Card styling clarification: the wallet-reference redesign applies only to the live
+Swap card. Scoped it under .live-swap-card and restored the previous frosted panels,
+stat-card rims, balances, shared buttons and other forms.
+
+Swap layout refinement: grouped the pay/receive panels into one tight stack, with
+a centered circular reverse-direction control, token badges, right-aligned amounts
+and balance captions matching the owner screenshot structure. Other cards remain
+unchanged. Build passes; browser visual verification of this layout is pending.
+
+### Live swaps checked by same-block balances — 2026-11-03
+
+After owner-reported 10 CLUB42 -> SWAP42 trade, read balances were
+9.999999999999999999 CLUB42 / 57.893727165800338503 SWAP42; reserves
+102.928932188134524757 / 167.964137210468711009. Event lookup was rate-limited,
+so receipt/event verification was not completed. After owner-reported reverse
+1 SWAP42 trade, RPC block 140483930 shows 10.603120139871539581 CLUB42 /
+56.893727165800338503 SWAP42; reserves 102.325812048262985175 /
+168.964137210468711009. Differences match 1 SWAP42 paid and
+0.603120139871539582 CLUB42 received. LP supply stayed 131.42135623730950488.
+Both directions are corroborated by balance/reserve changes; full receipt/event
+and fee-invariant evidence remains to be collected. Agent sent no transactions.
+Next mandatory feature: connect live NFT marketplace flows using deployed Art42.
+
+## Live Art42 mint/approve/list step — 2026-11-03
+
+Connected the NFT Marketplace to deployed Art42 and TokenZwap. Reads all ten IDs'
+mint status, ownership, per-token/operator approvals and escrow listings at one
+block. Uses existing branded artwork as clearly labelled previews, not replacement
+immutable metadata. Owners can mint an available ID, approve only that NFT to the
+marketplace and list at an exact integer-base-unit CLUB42 or SWAP42 price. Listing
+transfers the NFT into escrow; no sale payment occurs until purchase. Pending,
+rejected, failed, confirmed/replacement receipts, explorer links and refresh are
+handled. Account/network checks precede sends. Purchase/cancellation controls are
+intentionally deferred to the next agreed step, not marked complete.
+
+All 20 frontend tests pass, including mint/approval/list calldata, both payment
+tokens, invalid IDs/prices/payment and wrong-network guards. Production build
+passes. Browser interaction QA, live mint/approve/list and their receipts/escrow
+ownership remain pending owner verification. No public transactions sent by agent;
+no contract modifications or redeployment. Marketplace reserve isolation still
+requires full live flow checks after purchase/cancellation integration.
+
+## Saved checkpoint requested by owner — 2026-11-03
+
+Owner explicitly confirms none of the suggested NFT mint/approve/list actions
+have been performed. These are implemented but unverified live; purchase and
+cancellation UI remain unfinished. Save/push current frontend and documentation
+before changing discussion topics. Contract source and deployed addresses were
+not changed during this session. All 20 frontend tests and production build pass;
+broader contract, receipt/event, mobile and NFT live verification remain pending.

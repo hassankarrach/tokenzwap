@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Interface, getAddress } from 'ethers';
 import deployment from '../../deployment/bnb-testnet.json';
-const token = new Interface(['function balanceOf(address) view returns (uint256)']);
+const token = new Interface(['function balanceOf(address) view returns (uint256)','function allowance(address,address) view returns (uint256)']);
 const pool = new Interface(['function reserveA() view returns (uint256)','function reserveB() view returns (uint256)','function totalSupply() view returns (uint256)']);
 const contracts = deployment.contracts;
 export function walletError(error) {
@@ -28,13 +28,15 @@ export default function useWallet() {
           const result=await wallet.request({method:'eth_call',params:[{to:address,data:abi.encodeFunctionData(method,args)},block]});
           return abi.decodeFunctionResult(method,result)[0].toString();
         };
-        const [bnb,a,b,lp,reserveA,reserveB,supply]=await Promise.all([
+        const [bnb,a,b,lp,reserveA,reserveB,supply,allowanceA,allowanceB]=await Promise.all([
           wallet.request({method:'eth_getBalance',params:[account,block]}),
           call(contracts.Club42.address,token,'balanceOf',[account]),call(contracts.Swap42.address,token,'balanceOf',[account]),
           call(contracts.TokenZwap.address,token,'balanceOf',[account]),call(contracts.TokenZwap.address,pool,'reserveA'),
-          call(contracts.TokenZwap.address,pool,'reserveB'),call(contracts.TokenZwap.address,pool,'totalSupply')
+          call(contracts.TokenZwap.address,pool,'reserveB'),call(contracts.TokenZwap.address,pool,'totalSupply'),
+          call(contracts.Club42.address,token,'allowance',[account,contracts.TokenZwap.address]),
+          call(contracts.Swap42.address,token,'allowance',[account,contracts.TokenZwap.address])
         ]);
-        data={bnb:BigInt(bnb).toString(),a,b,lp,reserveA,reserveB,supply,block:BigInt(block).toString()};
+        data={allowanceA,allowanceB,bnb:BigInt(bnb).toString(),a,b,lp,reserveA,reserveB,supply,block:BigInt(block).toString()};
       }
       if(mounted.current&&request===version.current)setState({account,chain,data,loading:false,error:''});
     }catch(e){if(mounted.current&&request===version.current)setState(s=>({...s,data:null,loading:false,error:walletError(e)}));}

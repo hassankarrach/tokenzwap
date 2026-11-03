@@ -8,11 +8,20 @@ Continuing on another machine or in a new session? Read [the handoff](documentat
 
 Run a guided, press-Enter lesson on deposits, LP ownership, swaps and withdrawals with `python3 code/simulator.py`. See the [terminal playground guide](documentation/SIMULATOR.md). This uses pretend balances and needs no blockchain dependencies. Optional manual mode: `python3 code/simulator.py --free`.
 
+## Latest progress — 2026-11-03
+
+Live wallet approvals, initial/later deposits, withdrawals and both swap directions
+are connected. Two-wallet liquidity and swaps were exercised by the owner, with
+balance snapshots recorded in PLAN.md. The NFT screen supports mint/approve/list,
+but the owner has not performed these steps yet; buying/cancellation UI remain
+pending. All 20 frontend tests and production build pass. These checks do not
+complete the remaining contract edge-case or full testnet verification gates.
+
 ## UI preview
 
 A reference-inspired dark teal interface is available in `frontend/`, with Swap,
 Liquidity and NFT Marketplace React views and browser-only demo interactions. Use Node.js 22 or newer. From the repository root, run `npm --prefix frontend ci`, then `npm run dev`.
-Open http://127.0.0.1:5175/ (without `/frontend/`). MetaMask can now connect and read deployed BNB testnet balances. Transaction actions remain simulated under “Try demo”; live approvals and liquidity deposits are next.
+Open http://127.0.0.1:5175/ (without `/frontend/`). MetaMask can now connect and read deployed BNB testnet balances. Live Liquidity supports exact-amount approvals, the first deposit into an empty pool, and partial/full withdrawals. The owner reports the initial deposit completed; live withdrawal still needs verification. Live swaps are connected; the UI no longer exposes demo mode.
 See [frontend notes](frontend/README.md) for scope and verification limits.
 
 ## Required structure
