@@ -97,7 +97,7 @@ export default function App() {
               </button>
             </div>
           </header>
-          <main>
+          <main className={view === "nfts" ? "nft-marketplace-page" : undefined}>
             <div className="page-heading">
               <div>
                 <h1>{page.label}</h1>

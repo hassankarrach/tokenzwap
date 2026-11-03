@@ -1,5 +1,10 @@
 # Three-day guided plan
 
+**Next-session priority:** read [NEXT-SESSION.md](NEXT-SESSION.md). The owner agreed
+to focused educational bonuses including simple dynamic fees and flash loans,
+with contract changes tested locally before one planned replacement deployment.
+Earlier exclusions refer to mandatory scope, not this updated optional direction.
+
 ## Time budget and expectations
 
 Target 24–30 focused hours across three days with guided implementation and reuse of existing token/NFT code. This is an ambitious delivery target, not a guarantee. Two days is a stretch if the environment is already familiar. If the core accounting is unclear or tests fail, extend the schedule rather than skip verification. This is a testnet learning project, not an audited production exchange.
@@ -314,3 +319,93 @@ cancellation UI remain unfinished. Save/push current frontend and documentation
 before changing discussion topics. Contract source and deployed addresses were
 not changed during this session. All 20 frontend tests and production build pass;
 broader contract, receipt/event, mobile and NFT live verification remain pending.
+
+## TokenizeArt collection presentation reuse — 2026-11-03
+
+Owner requested the original NFT project's listing presentation and display font.
+Inspected tokenizeart-nft-minting-dapp/website/dist via the GitHub connector. Found
+Gang of Three by Vic Fieger and the selected-artwork / horizontal collectible shelf
+layout. Reused original scene/cutouts/font from commit 656aba8, retained font credit,
+and adapted catalog, rarity/search, arrows, mouse drag/touch scrolling, character
+layers and stepped bases into Art42Gallery. Source provenance is recorded in
+frontend/assets/art42-source/README.md. Token 6 has no original cutout and uses its
+full preview. Current chain ownership/listing state stays separate from catalog
+traits and preview assets; contracts/immutable metadata are unchanged.
+
+The display font is used across app headings/navigation/action buttons, with normal
+fonts for amounts, body text and wallet identifiers. Mint/approve/list controls
+remain connected alongside the selected artwork. Owner has still not performed
+NFT transactions; purchasing/cancellation UI remain pending. Build passes. Browser
+check showed the selected preview and global display font, but further interaction
+QA was interrupted by native automation timeout; shelf filtering/selection/drag,
+mobile layout and actual NFT transactions need verification. No commits/push made
+for this new design step yet.
+
+Typography clarification: Gang of Three is restricted to page headings and titles.
+Sidebar, brand/logo text and buttons use their previous standard UI fonts.
+
+Final typography scope: Gang of Three is limited to NFT Marketplace headings and
+artwork titles. Other pages retain their original typography.
+
+### NFT layout revision — 2026-11-03
+
+Changed collection browsing from a carousel to a responsive static grid. Removed
+arrow, drag and horizontal-scroll interaction code; search/rarity filters and
+card selection remain. Removed the rarity/availability badges from the large NFT
+preview (card status text remains). On desktop, the mint/list panel extends left
+across the column gap and approximately 6% into the preview; mobile stays within
+its column. Build passes; visual/browser checks of this revision remain pending.
+
+### Listing-button diagnosis — 2026-11-03
+
+Browser inspection shows owner wallet 0x7d54…b709 owns Art42 #1 with a mint
+confirmation displayed (tx 0xbb1356bbfe29f3347657f9f74e6c4436b4fa4d642393f8361f097af1dff5acf0).
+The NFT is not approved to the marketplace: Approve Art42 #1 was visible and
+List NFT was disabled. Replaced the unexplained disabled listing action with a
+sequential UI: step 1 approval, then step 2 listing after a confirmed allowance
+read. Added visible reasons instead of silent returns on loading/invalid action.
+Four NFT transaction tests and build pass. Agent did not approve/list the NFT;
+real approval/listing still require owner confirmation and verification.
+
+## NFT purchase and cancellation controls — 2026-11-03
+
+Owner confirms Art42 #1 displays listed for 5 CLUB42 after their MetaMask
+confirmation. Connected seller cancelNFTListing and buyer buyNFT controls. Listed
+NFT reads include buyer balance/allowance for the listing's actual payment token
+at the same block as listing/ownership reads. Buyers approve exactly the listed
+price if needed, then confirm the separate purchase; sellers see cancellation.
+Listing creation inputs cannot determine buyer payment approval. Unsupported
+payment tokens, inadequate balance and missing allowance are shown clearly.
+Receipts refresh NFT state and wallet balances. Existing account/network guards,
+rejection/failure/status and replacement receipt handling remain. No contracts
+changed, no new deployment, and no agent purchase/cancellation transactions sent.
+
+All 23 frontend tests and production build pass. Added coverage for both payment
+tokens/allowance thresholds, exact approval amounts, buy/cancel calldata with no
+native BNB value, wrong-network guards and rejection. Browser purchase/cancel QA,
+real purchase/cancel receipts, ownership/payment changes and unchanged pool
+reserves/LP supply still need live verification. Next manual test: switch from
+seller (second account) to original funded account, select listed Art42 #1,
+approve 5 CLUB42 if needed, then Buy and verify both wallets. Afterwards test
+seller cancellation with a relisting or another NFT.
+
+## Walkthrough record and NFT purchase verified — 2026-11-03
+
+Owner requested one detailed explanation-session record. Read
+[WALKTHROUGH-RECORD.md](WALKTHROUGH-RECORD.md) first when that session begins.
+It records accounts, exact amounts/actions, contract functions, evidence levels,
+rounding questions and outstanding checks. Latest same-block RPC evidence is saved
+in walkthrough-latest-snapshot.json (block 140494172): Art42 #1 belongs to original
+wallet; listing cleared; seller holds 15.603120139871539581 CLUB42 (+5), and pool
+reserves/LP supply match the previous swap snapshot. This corroborates the owner's
+5-CLUB42 NFT purchase. Cancellation/relisting and SWAP42 NFT purchase remain
+untested live. Receipt/event archive and broader verification/documentation remain.
+
+## Checklist scope correction — 2026-11-03
+
+At the owner's request, remove the separate mobile/layout and wallet-error,
+account/network-change and stale-state QA item from the remaining checklist.
+The subject does not specify that separate verification gate. Earlier pending
+notes about these checks are historical, not remaining mandatory requirements.
+The subject's requirement for a minimal UI working with a wallet like MetaMask
+still applies. This scope change does not mark those extra checks as performed.

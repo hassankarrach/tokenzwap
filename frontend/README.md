@@ -138,3 +138,29 @@ branded artwork is used as labelled preview imagery; immutable NFT metadata is
 unchanged. Buying and seller cancellation controls are the next step. All 20
 frontend tests and the build pass; real NFT transactions and browser QA remain
 pending. Run `node --test frontend/tests/*.test.js` for frontend tests.
+
+## TokenizeArt collection layout
+
+NFT Marketplace adapts the original NFT project's large selected preview, traits,
+rarity/search filters and horizontal shelf of layered collectible cards. Select a
+card to update the preview and mint/list form; use arrows, horizontal scrolling,
+mouse drag or keyboard arrows on the focused shelf. Live ownership/listing reads
+remain separate from catalog descriptions and artwork. Gang of Three is bundled
+locally for headings/navigation/buttons across the app; amounts, wallet addresses
+and body text keep standard UI fonts. Asset/font attribution is in
+assets/art42-source/README.md. This design does not add purchase/cancel controls.
+
+Collection layout update: cards now use a responsive static grid, with no carousel
+or sliding controls. Search/rarity filters and selection remain. Preview badges
+are removed, and the desktop mint/list panel overlaps the artwork edge slightly.
+
+## Buying and cancelling listings
+
+For a listed NFT, the seller sees Cancel listing, which returns it from escrow.
+Other accounts see the live price, selected payment-token balance and exact-price
+approval if needed, followed by Buy. Payment goes directly buyer-to-seller through
+the existing contract, separate from pool reserves. Transactions refresh ownership,
+listings and wallet balances. Purchase uses current on-chain listing terms at
+execution; no bonus expected-price or deadline parameters were added.
+All 23 frontend tests and build pass; real purchase/cancellation verification remains
+pending. Art42 #1 was listed for 5 CLUB42 by the owner during manual testing.

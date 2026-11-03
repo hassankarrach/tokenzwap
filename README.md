@@ -1,5 +1,8 @@
 # TokenZwap
 
+**Resuming today? Read [NEXT-SESSION.md](documentation/NEXT-SESSION.md) first for
+the latest agreed bonus scope, teaching approach and deployment strategy.**
+
 42 learning project: a two-token automated market maker (AMM) with a fixed-price NFT marketplace on BNB Chain testnet.
 
 Status: mandatory smart-contract features are implemented in source: two reused ERC-20s, Art42, liquidity deposits/LP receipts, partial/full withdrawals, both swap directions with a 1% fee, and NFT escrow/list/purchase/seller cancellation. NFT payments go directly buyer-to-seller. **All four contracts compile and eight focused local tests pass. All four BNB testnet deployments are confirmed; broader edge-case verification and live UI integration remain pending.** Scope follows the [provided subject](documentation/SUBJECT.txt); bonus slippage/minimum-output and deadline features are excluded. See the [contract reference](documentation/CONTRACTS.md) and [reuse notes](documentation/REUSE.md).
@@ -13,8 +16,9 @@ Run a guided, press-Enter lesson on deposits, LP ownership, swaps and withdrawal
 Live wallet approvals, initial/later deposits, withdrawals and both swap directions
 are connected. Two-wallet liquidity and swaps were exercised by the owner, with
 balance snapshots recorded in PLAN.md. The NFT screen supports mint/approve/list,
-but the owner has not performed these steps yet; buying/cancellation UI remain
-pending. All 20 frontend tests and production build pass. These checks do not
+and buying/cancellation controls. The owner completed a two-wallet NFT purchase
+for 5 CLUB42; cancellation/relisting and SWAP42 purchase remain untested live.
+All 23 frontend tests and production build pass. These checks do not
 complete the remaining contract edge-case or full testnet verification gates.
 
 ## UI preview
@@ -48,3 +52,5 @@ The owner initially followed small guided steps, then requested completion of al
 The frontend uses React/Vite. Contract tooling is pinned separately in the root package manifest. See [deployment instructions](deployment/README.md) for compilation, tests, gas estimation and the local MetaMask deployment helper.
 
 All four contracts are deployed on BNB testnet; addresses and transactions are saved in [the deployment record](deployment/bnb-testnet.json). [Saved faucet link](documentation/FAUCETS.md). GitHub synchronization is separate from smart-contract deployment.
+
+For the post-project explanation session, use the [walkthrough record](documentation/WALKTHROUGH-RECORD.md), which preserves actual account roles, actions, exact values and verification limits.
